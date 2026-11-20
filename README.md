@@ -1,4 +1,4 @@
-# Teams Live Transcript
+# Live Transcript for Microsoft Teams
 
 A Chrome / Edge extension that records a Microsoft Teams meeting's **live transcript while the meeting is still running** and saves it as a `.txt` file.
 
@@ -88,6 +88,16 @@ node tests/server.js
 Everything stays on your computer. The extension sends nothing anywhere.
 
 It asks for as little as it can: access to `teams.microsoft.com` and `teams.cloud.microsoft` only, plus permission to save files (`downloads`), keep recordings (`storage`), and start in a Teams tab that was already open when it was installed or reloaded (`scripting`). It reads what's already on your Teams page, keeps recordings in the browser's local extension storage, and writes `.txt` files to your Downloads folder. Check your institution's rules, and tell participants if you're keeping a copy of the transcript.
+
+## Publishing to the Edge Add-ons store
+
+- `bash tools/build-store-zip.sh` builds the upload, `dist/live-transcript-for-microsoft-teams-<version>.zip` (the `extension/` folder only).
+- `bash tools/render-store-images.sh` re-renders the store images in `store/` from `store/src/` with headless Edge.
+- [`store/listing.md`](store/listing.md) has the listing text, permission justifications and notes for the certification tester.
+- The privacy policy and landing page live in `docs/` and are served by GitHub Pages:
+  https://eftic-islam.github.io/teams-live-transcript/privacy.html
+
+Bump `version` in `extension/manifest.json` before uploading an update.
 
 ## License
 

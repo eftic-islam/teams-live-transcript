@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Screenshot: recording</title>
+    <!-- 1280x800 store screenshot: a Teams-style meeting (made-up content) with the
+         Transcript pane open, the recording badge, and the extension popup. -->
+    <style>
+      * { box-sizing: border-box; margin: 0; }
+      body { width: 1280px; height: 800px; overflow: hidden; background: #1b1b1f; color: #eee; font: 13px/1.45 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+      .top { height: 56px; display: flex; align-items: center; gap: 14px; padding: 0 20px; background: #26262c; border-bottom: 1px solid #333; }
+      .rec { width: 12px; height: 12px; border-radius: 50%; background: #e5484d; }
+      .timer { font-size: 15px; color: #ddd; }
+      .title { font-weight: 600; font-size: 14px; margin-left: 8px; }
+      .tools { margin-left: auto; display: flex; gap: 22px; color: #bbb; font-size: 12px; }
+      .tools div { text-align: center; }
+      .leave { background: #c4314b; color: #fff; padding: 6px 14px; border-radius: 6px; font-weight: 600; }
+      .main { display: flex; height: 744px; }
+      .stage { flex: 1; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+      .tiles { display: flex; gap: 10px; }
+      .tile { flex: 1; height: 110px; background: #2c2c33; border-radius: 10px; display: grid; place-items: center; }
+      .av { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 18px; color: #2a2a2a; }
+      .share { flex: 1; background: #f4f4f8; border-radius: 10px; color: #333; padding: 28px 34px; }
+      .share h3 { font-size: 22px; margin-bottom: 14px; color: #2b2b6b; }
+      .bar { height: 26px; border-radius: 4px; background: #5b5fc7; margin: 10px 0; }
+      .pane { width: 400px; background: #222228; border-left: 1px solid #333; display: flex; flex-direction: column; }
+      .pane h2 { font-size: 17px; padding: 16px 20px; border-bottom: 1px solid #333; }
+      .msgs { padding: 14px 20px; overflow: hidden; }
+      .who { display: flex; gap: 8px; align-items: baseline; margin-top: 14px; }
+      .who b { font-size: 13px; } .who span { color: #999; font-size: 12px; }
+      .msgs p { margin: 4px 0 0; color: #e6e6e6; font-size: 13.5px; }
+      .badge { position: absolute; left: 16px; bottom: 16px; display: flex; align-items: center; gap: 8px; padding: 6px 8px 6px 12px; border-radius: 999px; background: rgba(32, 31, 31, .95); color: #fff; font-size: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, .45); }
+      .badge .dot { width: 8px; height: 8px; border-radius: 50%; background: #e5484d; }
+      .badge button { font: inherit; font-weight: 600; border: 0; border-radius: 999px; padding: 4px 10px; background: #7f85f5; color: #111; }
+      /* extension popup (same look as popup.css, dark) */
+      .popup { position: absolute; top: 64px; right: 418px; width: 340px; padding: 14px 16px 16px; background: #1f1f1f; color: #f0f0f0; border: 1px solid #3d3d3d; border-radius: 10px; box-shadow: 0 18px 50px rgba(0, 0, 0, .55); font-size: 13px; }
+      .popup h1 { display: flex; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 10px; }
+      .popup h1 img { width: 20px; height: 20px; }
+      .popup h4 { font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: #adadad; margin-bottom: 6px; }
+      .popup .status { margin-bottom: 8px; } .popup .pdot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #f1707b; margin-right: 6px; }
+      .popup .primary { width: 100%; font: inherit; font-weight: 600; padding: 7px 10px; border-radius: 6px; border: 0; background: #7f85f5; color: #111; }
+      .popup section + section { border-top: 1px solid #3d3d3d; margin-top: 14px; padding-top: 12px; }
+      .popup .hint { color: #adadad; font-size: 12px; margin-bottom: 4px; }
+      .popup li { list-style: none; display: flex; align-items: center; gap: 6px; padding: 6px 0; border-bottom: 1px solid #3d3d3d; }
+      .popup li:last-child { border-bottom: 0; }
+      .popup .meta { flex: 1; } .popup .sub { color: #adadad; font-size: 11px; }
+      .popup li button { font: inherit; font-size: 12px; padding: 4px 8px; border-radius: 6px; border: 1px solid #3d3d3d; background: transparent; color: #f0f0f0; }
+      .popup ul { padding: 0; }
+      .caption { position: absolute; left: 50%; top: 18px; transform: translateX(-50%); }
+    </style>
+  </head>
+  <body>
+    <div class="top">
+      <div class="rec"></div><div class="timer">00:42:18</div><div class="title">Weekly product sync</div>
+      <div class="tools"><div>Chat</div><div>People</div><div>React</div><div>More</div><div class="leave">Leave</div></div>
+    </div>
+    <div class="main">
+      <div class="stage">
+        <div class="tiles">
+          <div class="tile"><div class="av" style="background:#c7d7ff">AC</div></div>
+          <div class="tile"><div class="av" style="background:#ffd9c7">PS</div></div>
+          <div class="tile"><div class="av" style="background:#c9f0d9">SO</div></div>
+          <div class="tile"><div class="av" style="background:#f6e3a8">JL</div></div>
+        </div>
+        <div class="share">
+          <h3>Q4 roadmap</h3>
+          <div class="bar" style="width:72%"></div><div class="bar" style="width:54%;opacity:.8"></div>
+          <div class="bar" style="width:86%;opacity:.6"></div><div class="bar" style="width:40%;opacity:.45"></div>
+        </div>
+      </div>
+      <div class="pane">
+        <h2>Transcript</h2>
+        <div class="msgs">
+          <div class="who"><b>Jordan Lee</b><span>10:23 AM</span></div>
+          <p>Jordan Lee started transcription</p>
+          <div class="who"><b>Alex Chen</b><span>10:23 AM</span></div>
+          <p>Morning everyone. Let's start with the budget numbers for Q4.</p>
+          <p>I've shared the sheet in the chat, so you can follow along.</p>
+          <div class="who"><b>Priya Shah</b><span>10:25 AM</span></div>
+          <p>Thanks. Marketing came in about eight percent under plan, mostly because the spring campaign moved.</p>
+          <div class="who"><b>Sam Okafor</b><span>10:27 AM</span></div>
+          <p>That lines up with engineering. The launch is now targeting the second week of May.</p>
+          <p>We'll need design sign-off on the onboarding screens by the end of the month.</p>
+          <div class="who"><b>Alex Chen</b><span>10:29 AM</span></div>
+          <p>Okay. Priya, can you own the updated timeline? Let's review it on Thursday.</p>
+          <div class="who"><b>Priya Shah</b><span>10:30 AM</span></div>
+          <p>Sure, I'll send it round before then.</p>
+        </div>
+      </div>
+    </div>
+    <div class="badge"><span class="dot"></span><span>Recording transcript · 214 paragraphs</span><button>Save .txt</button></div>
+    <div class="popup">
+      <h1><img src="../../extension/icons/icon-32.png" alt="" />Live Transcript for Microsoft Teams</h1>
+      <section>
+        <h4>This page</h4>
+        <p class="status"><span class="pdot"></span>Recording the Transcript pane: 214 paragraphs.</p>
+        <button class="primary">Save live transcript (.txt)</button>
+      </section>
+      <section>
+        <h4>Recorded during meetings</h4>
+        <p class="hint">Kept here even after the meeting ends or the tab closes.</p>
+        <ul>
+          <li><div class="meta"><div>Weekly product sync</div><div class="sub">transcript · Nov 20, 2026, 10:23 AM · 214 paragraphs</div></div><button>Save</button><button>Delete</button></li>
+          <li><div class="meta"><div>Design review</div><div class="sub">transcript · Nov 19, 2026, 3:00 PM · 388 paragraphs</div></div><button>Save</button><button>Delete</button></li>
+        </ul>
+      </section>
+    </div>
+  </body>
+</html>

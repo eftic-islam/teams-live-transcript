@@ -196,7 +196,7 @@ $('diagnose').addEventListener('click', async () => {
     setResult('The extension isn’t running on this page. Open Teams in the browser and reload the tab.', 'err');
     return;
   }
-  const text = [`Teams Live Transcript diagnostic · ${new Date().toISOString()}`, `Browser: ${navigator.userAgent}`, '', ...reports].join('\n\n');
+  const text = [`Live Transcript for Microsoft Teams diagnostic · ${new Date().toISOString()}`, `Browser: ${navigator.userAgent}`, '', ...reports].join('\n\n');
   let copied = false;
   try {
     await navigator.clipboard.writeText(text);

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Promo tile</title>
+    <!-- Rendered at 440x280 (?small) and 1400x560 (?large) by tools/render-store-images.sh -->
+    <style>
+      * { box-sizing: border-box; margin: 0; }
+      body {
+        display: flex; align-items: center; gap: 4%; padding: 0 6%;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #fff;
+        background: radial-gradient(120% 140% at 0% 0%, #7f8cff 0%, #5b5fc7 45%, #3f3aa8 100%);
+        overflow: hidden;
+      }
+      .logo { flex: none; filter: drop-shadow(0 6px 18px rgba(20, 10, 80, .35)); }
+      .text { flex: 1; min-width: 0; }
+      h1 { font-weight: 800; letter-spacing: -0.01em; line-height: 1.05; }
+      h1 span { display: block; font-weight: 600; opacity: .9; }
+      p { opacity: .92; line-height: 1.35; }
+      .doc { margin-left: auto; flex: none; background: #fff; color: #1f1f1f; border-radius: 18px; box-shadow: 0 20px 50px rgba(20, 10, 80, .35); }
+      .doc .h { font-weight: 700; color: #5b5fc7; }
+      .doc .t { color: #555; }
+      .doc .line { background: #e7e7f6; border-radius: 6px; }
+
+      body.small { width: 440px; height: 280px; }
+      body.small .logo { width: 104px; }
+      body.small h1 { font-size: 30px; }
+      body.small h1 span { font-size: 17px; margin-top: 4px; }
+      body.small p { font-size: 14px; margin-top: 10px; }
+      body.small .doc { display: none; }
+
+      body.large { width: 1400px; height: 560px; gap: 48px; padding: 0 90px; }
+      body.large .logo { width: 220px; }
+      body.large h1 { font-size: 64px; }
+      body.large h1 span { font-size: 34px; margin-top: 8px; }
+      body.large p { font-size: 26px; margin-top: 18px; max-width: 520px; }
+      body.large .doc { width: 400px; padding: 26px 28px; font-size: 17px; line-height: 1.5; }
+      body.large .doc .h { margin-top: 12px; }
+      body.large .doc .h:first-child { margin-top: 0; }
+    </style>
+  </head>
+  <body>
+    <img class="logo" src="../logo-512.png" alt="" />
+    <div class="text">
+      <h1>Live Transcript <span>for Microsoft Teams</span></h1>
+      <p>Save the meeting transcript while it's live. Every word, kept.</p>
+    </div>
+    <div class="doc">
+      <div class="h">Alex Chen · 10:23 AM</div>
+      <div class="t">Let's start with the budget numbers.</div>
+      <div class="h">Priya Shah · 10:24 AM</div>
+      <div class="t">I've updated the sheet with Q4.</div>
+      <div class="h">Sam Okafor · 10:25 AM</div>
+      <div class="t">Great, then launch moves to May.</div>
+    </div>
+    <script>
+      document.body.className = location.search.includes('large') ? 'large' : 'small';
+    </script>
+  </body>
+</html>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Live Transcript for Microsoft Teams</title>
+    <meta name="description" content="Browser extension that saves a Microsoft Teams meeting's transcript as a .txt file while the meeting is live." />
+    <link rel="icon" href="logo.png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <img src="logo.png" alt="" />
+        <h1>Live Transcript for Microsoft Teams</h1>
+      </header>
+      <p class="muted">Save a Teams meeting's transcript as a text file while the meeting is still going.</p>
+
+      <h2>What it does</h2>
+      <ul>
+        <li>Records every paragraph in the meeting's <strong>Transcript</strong> pane as it appears, or the live captions if transcription is off.</li>
+        <li>Catches up on everything said before you opened the pane, and fills in lines you missed while scrolled up.</li>
+        <li>Never skips silently: if a paragraph can't be read, the file says so and marks the spot.</li>
+        <li>Keeps a backup as you go, so nothing is lost if the meeting ends or the tab closes.</li>
+        <li>Saves a tidy <code>.txt</code> named by date, start time and meeting, e.g. <code>20th Nov '26, 10.23am - Weekly sync - transcript.txt</code>.</li>
+      </ul>
+
+      <h2>How to use it</h2>
+      <ol>
+        <li>Join the meeting in Edge or Chrome at teams.microsoft.com (the desktop app can't be read by a browser extension).</li>
+        <li>Open the Transcript pane once transcription is on. A small "Recording transcript" badge appears.</li>
+        <li>Click <strong>Save .txt</strong> on the badge, or in the extension's popup, at any time.</li>
+      </ol>
+
+      <h2>Privacy</h2>
+      <p>Everything stays on your computer. Nothing is sent anywhere. <a href="privacy.html">Read the privacy policy</a>.</p>
+
+      <h2>Source code and support</h2>
+      <p>
+        <a href="https://github.com/eftic-islam/teams-live-transcript">github.com/eftic-islam/teams-live-transcript</a> ·
+        <a href="https://github.com/eftic-islam/teams-live-transcript/issues">report a problem</a>
+      </p>
+
+      <footer>
+        An independent project, not affiliated with or endorsed by Microsoft. Microsoft Teams is a trademark of Microsoft Corporation. · <a href="privacy.html">Privacy</a>
+      </footer>
+    </main>
+  </body>
+</html>

@@ -65,4 +65,4 @@ li .sub { color: var(--muted); font-size: 11px; }
 li button { padding: 4px 8px; font-size: 12px; }
 .empty { color: var(--muted); font-size: 12px; }
 button.link { border: none; padding: 0; background: none; color: var(--muted); font-size: 12px; text-decoration: underline; text-align: left; }
-h1 { display: flex; align-items: center; gap: 8px; }
+h1 { display: flex; align-items: center; gap: 8px; font-size: 14px; }

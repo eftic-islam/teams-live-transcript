@@ -1,0 +1,103 @@
+<!doctype html><meta charset="utf-8"><title>(5) Teams and Channels | Meeting in "General" | Microsoft Teams</title>
+<script src="shim.js"></script>
+<script src="../../extension/src/selectors.js"></script>
+<script src="../../extension/src/parse.js"></script>
+<script src="../../extension/src/content.js"></script>
+<script src="data.js"></script>
+<style>
+  #pane{position:fixed;right:0;top:0;width:520px;height:100vh;display:flex;flex-direction:column;font:14px sans-serif;border-left:1px solid #ccc}
+  #list{flex:1;overflow-y:auto;position:relative}
+  #spacer{position:relative}
+  .row{position:absolute;left:0;right:0;padding:4px 12px;box-sizing:border-box}
+  .hdr{font-weight:600}
+</style>
+<div id="pane"><h2>Transcript</h2><div id="list"><div id="spacer"></div></div></div>
+<script>
+// In-meeting Transcript pane simulator: virtualized, grows while the meeting runs,
+// follows the newest paragraph while you're at the bottom (like "Go to current").
+const LAYOUT = new URLSearchParams(location.search).get('layout') || 'known';
+if (LAYOUT === 'generic') document.getElementById('list').setAttribute('aria-label', 'Transcript');
+const ALL = makeTranscript(320).map((e, i, a) => ({ ...e, header: i === 0 || a[i - 1].speaker !== e.speaker || i % 9 === 0 }));
+const hhmm = (s) => { const m = 10 * 60 + 23 + Math.floor(s / 60); const h = Math.floor(m / 60); return `${((h + 11) % 12) + 1}:${String(m % 60).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`; };
+ALL.forEach((e) => (e.time = hhmm(e.start)));
+window.__truth = ALL;
+const shown = []; // paragraphs that exist so far: { ...entry, text (maybe partial) }
+const list = document.getElementById('list'), spacer = document.getElementById('spacer');
+const height = (e) => (e.header ? 26 : 0) + 22 + Math.ceil(e.text.length / 55) * 18;
+let tops = [], total = 0;
+let loadedFrom = 0; // older paragraphs before this aren't loaded yet (teams layout)
+function layout() { tops = []; total = 0; shown.forEach((e, i) => { tops[i] = total; if (i >= loadedFrom) total += height(ALL[i]); }); for (let i = 0; i < shown.length; i++) tops[i] -= tops[loadedFrom] || 0; spacer.style.height = total + 'px'; }
+let loading = false;
+function maybeLoadOlder() {
+  if (LAYOUT !== 'teams' || NO_HISTORY || loading || loadedFrom === 0 || list.scrollTop > 200) return;
+  loading = true;
+  setTimeout(() => { const h = total; loadedFrom = Math.max(0, loadedFrom - 30); layout(); list.scrollTop += total - h; loading = false; render(); }, 150);
+}
+function rowEl(i) {
+  const e = shown[i], div = document.createElement('div');
+  div.className = 'row'; div.dataset.i = i; div.style.top = tops[i] + 'px';
+  if (LAYOUT === 'known') {
+    div.id = 'listItem-' + i; div.setAttribute('aria-setsize', shown.length);
+    if (e.header) div.innerHTML = `<div class="hdr"><span class="itemDisplayName-ab12">${e.speaker}</span> <span id="Header-timestamp-${i}">${e.time}</span></div>`;
+    div.insertAdjacentHTML('beforeend', `<div id="sub-entry-${i}"></div>`);
+    div.lastElementChild.textContent = e.text;
+  } else if (LAYOUT === 'teams') {
+    // Structure copied from a real meeting's diagnostic (teams.cloud.microsoft, 2026-11).
+    div.setAttribute('data-tid', `transcript-chat-message-00000000-1111-2222-3333-444444444444/${5000 + i * 5 + (i % 3)}`);
+    div.innerHTML = `<div class="fui-ChatMessageCompact"><div></div><div class="fui-ChatMessageCompact__body"><div><div>` +
+      `<span class="fui-ChatMessageCompact__author"><span data-tid="transcript-item-author"></span></span>` +
+      `<span class="fui-ChatMessageCompact__timestamp"></span></div><div><div><span data-tid="call-transcript-panel-message"></span></div></div></div></div></div>`;
+    if (e.header) { div.querySelector('[data-tid="transcript-item-author"]').textContent = e.speaker; div.querySelector('.fui-ChatMessageCompact__timestamp').textContent = e.time; }
+    div.querySelector('[data-tid="call-transcript-panel-message"]').textContent = e.text;
+  } else {
+    div.setAttribute('role', 'listitem'); div.setAttribute('aria-posinset', i + 1); div.setAttribute('aria-setsize', shown.length);
+    if (e.header) div.innerHTML = `<div>${e.speaker.split(' ').map((w) => w[0]).join('')}</div><div class="hdr">${e.speaker}</div><div>${e.time}</div>`;
+    const t = document.createElement('div'); t.className = 'txt'; t.textContent = e.text; div.append(t);
+  }
+  return div;
+}
+function render() {
+  const lo = list.scrollTop - 150, hi = list.scrollTop + list.clientHeight + 150;
+  const want = new Set();
+  for (let i = loadedFrom; i < shown.length; i++) if (tops[i] + 60 > lo && tops[i] < hi) want.add(i);
+  for (const el of [...spacer.children]) if (+el.dataset.i < loadedFrom) el.remove();
+  for (const i of want) { const el = spacer.querySelector(`[data-i="${i}"]`); if (el) el.style.top = tops[i] + 'px'; }
+  maybeLoadOlder();
+  for (const el of [...spacer.children]) if (!want.has(+el.dataset.i)) el.remove();
+  for (const i of want) {
+    const existing = spacer.querySelector(`[data-i="${i}"]`);
+    if (!existing) { spacer.append(rowEl(i)); continue; }
+    const t = existing.querySelector('[id^="sub-entry-"], .txt, [data-tid="call-transcript-panel-message"]');
+    if (t.textContent !== shown[i].text) t.textContent = shown[i].text;
+    existing.setAttribute('aria-setsize', shown.length);
+  }
+}
+let follow = true;
+list.addEventListener('scroll', () => { follow = list.scrollTop + list.clientHeight >= list.scrollHeight - 5; render(); });
+function stick() { if (follow) list.scrollTop = list.scrollHeight; render(); }
+// Meeting already running: first 120 paragraphs exist before the extension starts.
+// ?start=N: N paragraphs already spoken. ?nohistory: like after rejoining, older
+// paragraphs (all but the last 30) can't be loaded any more.
+const START = Number(new URLSearchParams(location.search).get('start') || 120);
+const NO_HISTORY = new URLSearchParams(location.search).has('nohistory');
+for (let i = 0; i < START; i++) shown.push({ ...ALL[i] });
+if (LAYOUT === 'teams') loadedFrom = START - 40;
+if (NO_HISTORY) loadedFrom = START - 30;
+layout(); stick();
+
+window.userScrollsUp = () => { list.scrollTop = 0; follow = false; render(); };
+window.userGoesToCurrent = () => { follow = true; stick(); };
+// Speak paragraphs from..to, a few words at a time.
+window.speak = async (from, to, wait = () => Promise.resolve()) => {
+  for (let i = from; i < to; i++) {
+    const words = ALL[i].text.split(' ');
+    shown.push({ ...ALL[i], text: words.slice(0, 2).join(' ') });
+    layout(); stick();
+    for (let w = 5; w < words.length + 3; w += 3) {
+      shown[i].text = words.slice(0, Math.min(w, words.length)).join(' ');
+      render(); await wait();
+    }
+    await wait();
+  }
+};
+</script>

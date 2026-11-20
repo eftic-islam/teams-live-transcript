@@ -1,0 +1,51 @@
+<!doctype html><meta charset="utf-8"><title>Design review | Microsoft Teams</title>
+<script src="shim.js"></script>
+<script src="../../extension/src/selectors.js"></script>
+<script src="../../extension/src/parse.js"></script>
+<script src="../../extension/src/content.js"></script>
+<script src="data.js"></script>
+<div data-tid="closed-caption-v2-window-wrapper"><div data-tid="closed-captions-renderer" id="cc"></div></div>
+<script>
+// Live caption simulator. Each line is "spoken" a few words at a time; only the
+// last 4 lines stay on screen. Edge cases covered:
+//  - final words and removal of a line in the same update
+//  - a word corrected mid-line (text changes, not just grows)
+//  - every 10th line, all visible captions are re-created (React re-render)
+const cc = document.getElementById('cc');
+function makeItem(speaker, text) {
+  const el = document.createElement('div');
+  el.className = 'fui-ChatMessageCompact';
+  el.innerHTML = '<span data-tid="author"></span><span data-tid="closed-caption-text"></span>';
+  el.children[0].textContent = speaker; el.children[1].textContent = text;
+  return el;
+}
+window.runLive = async (n) => {
+  const lines = makeTranscript(n);
+  window.__truth = lines;
+  const yieldNow = () => Promise.resolve(); // lets MutationObserver callbacks run
+  for (let i = 0; i < n; i++) {
+    const { speaker, text } = lines[i];
+    const words = text.split(' ');
+    const item = makeItem(speaker, '');
+    cc.append(item);
+    const textEl = () => cc.lastElementChild.querySelector('[data-tid="closed-caption-text"]');
+    for (let w = 1; w <= words.length; w += 3) {
+      let partial = words.slice(0, w).join(' ');
+      if (i % 7 === 3 && w === 1) partial = 'misheard ' + partial; // corrected on the next update
+      const last = w + 3 > words.length;
+      textEl().textContent = last ? text : partial;
+      if (last && i % 5 === 0) {
+        // same task: final words + oldest lines scrolled away
+        while (cc.children.length > 1) cc.firstElementChild.remove();
+      }
+      await yieldNow();
+    }
+    while (cc.children.length > 4) cc.firstElementChild.remove();
+    if (i % 10 === 9) {
+      const copies = [...cc.children].map((c) => makeItem(c.children[0].textContent, c.children[1].textContent));
+      cc.replaceChildren(...copies);
+    }
+    await yieldNow();
+  }
+};
+</script>

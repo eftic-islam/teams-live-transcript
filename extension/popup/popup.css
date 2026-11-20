@@ -1,0 +1,68 @@
+:root {
+  --bg: #ffffff;
+  --fg: #1f1f1f;
+  --muted: #616161;
+  --line: #e0e0e0;
+  --accent: #5b5fc7;
+  --accent-fg: #ffffff;
+  --ok: #0e7a0d;
+  --warn: #9a6700;
+  --err: #c50f1f;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1f1f1f;
+    --fg: #f0f0f0;
+    --muted: #adadad;
+    --line: #3d3d3d;
+    --accent: #7f85f5;
+    --accent-fg: #111111;
+    --ok: #54b054;
+    --warn: #e0a800;
+    --err: #f1707b;
+  }
+}
+
+body {
+  width: 340px;
+  margin: 0;
+  padding: 14px 16px 16px;
+  background: var(--bg);
+  color: var(--fg);
+  font: 13px/1.45 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { font-size: 15px; margin: 0 0 10px; }
+h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 0 0 6px; }
+section + section { border-top: 1px solid var(--line); margin-top: 14px; padding-top: 12px; }
+.status, .hint { margin: 0 0 8px; }
+.hint { color: var(--muted); font-size: 12px; }
+.buttons { display: flex; flex-direction: column; gap: 6px; }
+button {
+  font: inherit;
+  padding: 7px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+}
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); font-weight: 600; }
+button:disabled { opacity: 0.55; cursor: default; }
+.result { margin: 8px 0 0; white-space: pre-wrap; }
+.result.ok { color: var(--ok); }
+.result.warn { color: var(--warn); }
+.result.err { color: var(--err); }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--err); margin-right: 6px; animation: pulse 1.4s infinite; }
+@keyframes pulse { 50% { opacity: 0.3; } }
+
+ul { list-style: none; margin: 0; padding: 0; }
+li { display: flex; align-items: center; gap: 6px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+li:last-child { border-bottom: none; }
+li .meta { flex: 1; min-width: 0; }
+li .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+li .sub { color: var(--muted); font-size: 11px; }
+li button { padding: 4px 8px; font-size: 12px; }
+.empty { color: var(--muted); font-size: 12px; }
+button.link { border: none; padding: 0; background: none; color: var(--muted); font-size: 12px; text-decoration: underline; text-align: left; }
+h1 { display: flex; align-items: center; gap: 8px; }
